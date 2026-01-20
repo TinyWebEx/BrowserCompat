@@ -23,3 +23,32 @@ export async function getBrowserValue(switchBrowser) {
     }
     return switchBrowser.chrome;
 }
+
+/**
+ * Check if the current browser is Chrome/Chromium.
+ *
+ * @returns {Promise<boolean>}
+ */
+export async function isChrome() {
+    if (browser.runtime.getBrowserInfo) {
+        const browserInfo = await browser.runtime.getBrowserInfo();
+
+        if (browserInfo.vendor === "Mozilla") {
+            return false;
+        } else if (browserInfo.vendor === "Google") {
+            return true;
+        }
+
+        switch (browserInfo.name) {
+            case "Thunderbird":
+            case "Firefox":
+                return false;
+        
+            case "Chrome":
+            case "Chromium":
+            default:
+                return true;
+        }
+    }
+    return true;
+}
